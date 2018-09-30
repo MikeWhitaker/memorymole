@@ -46,7 +46,7 @@ export default class SplashScreen extends Phaser.Scene {
    */
   create() {
     //  We have nothing left to do here. Start the next scene.
-    this.scene.start('Game');
+    this.scene.start('Main');
   }
 
   //  ------------------------------------------------------------------------

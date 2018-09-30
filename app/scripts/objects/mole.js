@@ -1,4 +1,4 @@
-export default class Grid extends Phaser.GameObjects.Sprite {
+export default class Mole extends Phaser.GameObjects.Sprite {
   /**
    *  A simple prefab (extended game object class), displaying a spinning
    *  Phaser 3 logo.
@@ -6,7 +6,7 @@ export default class Grid extends Phaser.GameObjects.Sprite {
    *  @extends Phaser.GameObjects.Sprite
    */
   constructor(scene) {
-    super(scene, 0, 0, 'playGrid');
+    super(scene, 0, 0, 'moleIcon');
 
     const x = scene.cameras.main.width / 2;
     const y = scene.cameras.main.height / 2;

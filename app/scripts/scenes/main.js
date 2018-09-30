@@ -1,4 +1,5 @@
 import Grid from '@/objects/Grid';
+import Mole from '@/objects/Mole';
 
 export default class Main extends Phaser.Scene {
   /**
@@ -19,8 +20,8 @@ export default class Main extends Phaser.Scene {
    */
   create(/* data */) {
     //  TODO: Replace this content with really cool game code here :)
-    debugger;
-    this.gridImage = this.add.existing(new Grid(this));
+    this.grid = this.add.existing(new Grid(this));
+    this.aMole = this.add.existing(new Mole(this));
   }
 
   /**
@@ -32,6 +33,6 @@ export default class Main extends Phaser.Scene {
    *  @param {number} dt Time elapsed since last update.
    */
   update(/* t, dt */) {
-    this.logo.update();
+    // this.logo.update();
   }
 }
