@@ -1,3 +1,5 @@
+import Mole from "./mole";
+
 export default class Grid extends Phaser.GameObjects.Sprite {
   /**
    *  A simple prefab (extended game object class), displaying a spinning
@@ -6,7 +8,7 @@ export default class Grid extends Phaser.GameObjects.Sprite {
    *  @extends Phaser.GameObjects.Sprite
    */
   constructor(scene) {
-    super(scene, 0, 0, 'playGrid');
+    super(scene, 0, 0, "playGrid");
 
     const x = scene.cameras.main.width / 2;
     const y = scene.cameras.main.height / 2;
@@ -14,16 +16,17 @@ export default class Grid extends Phaser.GameObjects.Sprite {
     this.setPosition(x, y);
     this.setOrigin(0.5);
     this.grid = {};
-    
   }
 
   create() {
-    var grid = function(xSize, ySize) {
+    var vm = this;
+
+    var Grid = function(xSize, ySize) {
       //initialize the grid.
       var gridArray = [];
       var dimensions = null;
       var listOfCells = [];
-  
+
       var Dimensions = function(row, col) {
           var x = col;
           var y = row;
@@ -44,18 +47,18 @@ export default class Grid extends Phaser.GameObjects.Sprite {
         getListOfCells = function() {
           return listOfCells;
         };
-  
+
       dimensions = new Dimensions(ySize, xSize);
-  
+
       return {
         getDimensions: getDimensions,
         getGridArray: getGridArray,
         getListOfCells: getListOfCells,
         setGridArray: setGridArray
       };
-    }();
-  
-    var point = function(col, row) {
+    };
+
+    var Point = function(col, row) {
       var x = col,
         y = row,
         getCoOrdinates = function() {
@@ -64,41 +67,50 @@ export default class Grid extends Phaser.GameObjects.Sprite {
             y: y
           };
         };
-  
+
       return {
         getCoOrdinates: getCoOrdinates
       };
     };
-  
+
     var Row = function(xSize, yCurrentRow) {
       var row = [];
       var gameGrid = vm.gameGrid.getListOfCells();
+      
       for (let i = 0; i < xSize; i++) {
-        var aCell = new Cell(yCurrentRow, i);
-        // one in five should generate a living cell.
-        // others should be dead but still present.
-        let rnd = Math.random() * 10;
-        if (rnd < 0.8) {
-          row.push(aCell);
-          aCell.live();
-        } else {
-          aCell.die();
-          row.push(aCell);
-        }
         // pop a reference to the cell in a list as well for convenience
-        gameGrid.push(aCell);
+        var mole = new Mole('playGrid',i ,yCurrentRow);
+        gameGrid.push(mole);
       }
-  
+
       var getRow = function() {
         return row;
       };
-  
+
       return {
         getRow: getRow
       };
     };
+    
+    function activate() {
+      var columnAmount = 3;
+      var rowAmount = 4; // total of 12 cells
+
+      vm.gameGrid = new Grid(columnAmount, rowAmount);
+      var gridArray = vm.gameGrid.getGridArray();
+      for (let i = 0; i < rowAmount; i++) {
+        debugger;
+        row = new Row(columnAmount, i);
+        gridArray.push(row);
+      }
+
+
+
+    
+    }
+
+    activate();
   }
-  
 
   /**
    *  Increment the angle smoothly.

@@ -5,14 +5,26 @@ export default class Mole extends Phaser.GameObjects.Sprite {
    *
    *  @extends Phaser.GameObjects.Sprite
    */
-  constructor(scene) {
-    super(scene, 0, 0, 'moleIcon');
+  constructor(scene, gridX, gridY) {
+    super(scene, 0, 0, "moleIcon");
 
-    const x = scene.cameras.main.width / 2;
-    const y = scene.cameras.main.height / 2;
+    // 600 x gives 200 per mole
+    // 900 y gives 225 per mole
+    this.gridPosX = gridX;
+    this.gridPosY = gridY;
+    this.gridPixelPosX = 200 * gridX;
+    this.gridPixelPosY = 255 * gridY;
+    this.scene = scene;
+  }
 
-    this.setPosition(x, y);
+  create() {
     this.setOrigin(0.5);
+    this.setPosition(this.gridPixelPosX, this.gridPixelPosY);
+    this.cellData = this.scene.add.image(
+      this.gridPixelPosX,
+      this.gridPixelPosY,
+      'moleIcon'
+    );
   }
 
   /**
