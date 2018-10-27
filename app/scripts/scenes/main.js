@@ -21,7 +21,8 @@ export default class Main extends Phaser.Scene {
   create(/* data */) {
     //  TODO: Replace this content with really cool game code here :)
     this.grid = this.add.existing(new Grid(this));
-    this.aMole = this.add.existing(new Mole(this));
+    
+    this.aMole = this.add.existing(new Mole(this, 2, 2));
   }
 
   /**

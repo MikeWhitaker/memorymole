@@ -15,9 +15,8 @@ export default class Mole extends Phaser.GameObjects.Sprite {
     this.gridPixelPosX = 200 * gridX;
     this.gridPixelPosY = 255 * gridY;
     this.scene = scene;
-  }
-
-  create() {
+ 
+    debugger;
     this.setOrigin(0.5);
     this.setPosition(this.gridPixelPosX, this.gridPixelPosY);
     this.cellData = this.scene.add.image(
