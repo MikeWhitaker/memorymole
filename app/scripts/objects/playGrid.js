@@ -1,4 +1,4 @@
-import Mole from './mole';
+import Mole from './Mole';
 
 export default class PlayGrid extends Phaser.GameObjects.Sprite {
   /**
@@ -8,8 +8,9 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
    *  @extends Phaser.GameObjects.Sprite
    */
   constructor(scene) {
-    //super(scene, 0, 0, 'playGrid');
+    super(scene, 0, 0, 'PlayGrid');
 
+    debugger;
     const x = scene.cameras.main.width / 2;
     const y = scene.cameras.main.height / 2;
 
