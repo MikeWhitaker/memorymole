@@ -1,5 +1,5 @@
 import PlayGrid from '@/objects/PlayGrid';
-import Mole from '@/objects/Mole';
+//import Mole from '@/objects/Mole';
 
 export default class Main extends Phaser.Scene {
   /**
@@ -21,7 +21,6 @@ export default class Main extends Phaser.Scene {
   create(/* data */) {
     //  TODO: Replace this content with really cool game code here :)
     this.grid = this.add.existing(new PlayGrid(this));
-    
     // this.aMole = this.add.existing(new Mole(this, 2, 2));
   }
 

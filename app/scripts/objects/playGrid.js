@@ -1,4 +1,5 @@
-import Mole from './Mole';
+import Mole from "./Mole";
+import { create } from "domain";
 
 export default class PlayGrid extends Phaser.GameObjects.Sprite {
   /**
@@ -8,9 +9,8 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
    *  @extends Phaser.GameObjects.Sprite
    */
   constructor(scene) {
-    super(scene, 0, 0, 'PlayGrid');
+    super(scene, 0, 0, "playGrid");
 
-    debugger;
     const x = scene.cameras.main.width / 2;
     const y = scene.cameras.main.height / 2;
 
@@ -56,7 +56,7 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
         setGridArray: setGridArray
       };
     };
- 
+
     var Row = function(xSize, yCurrentRow) {
       var row = [];
       var gameGrid = vm.gameGrid.getListOfCells();
@@ -64,7 +64,7 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
         // pop a reference to the cell in a list as well for convenience
         //this.aMole = this.add.existing(new Mole(this));
         var mole = scene.add.existing(new Mole(scene, i, yCurrentRow));
-      
+
         gameGrid.push(mole);
       }
 
@@ -76,7 +76,7 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
         getRow: getRow
       };
     };
-    
+
     function activate() {
       var columnAmount = 3;
       var rowAmount = 4; // total of 12 cells
