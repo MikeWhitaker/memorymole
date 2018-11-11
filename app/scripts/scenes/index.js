@@ -9,3 +9,4 @@
 export {default as SplashScreen} from './splash-screen';
 //export {default as Game} from './game';
 export {default as Main} from './main';
+export {default as Demo} from './demo';

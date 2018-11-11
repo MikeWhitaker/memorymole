@@ -26,6 +26,7 @@ export default class Mole extends Phaser.GameObjects.Sprite {
     this.cellData = this.scene.add
       .image(this.gridPixelPosX, this.gridPixelPosY, "moleIcon")
       .setInteractive();
+
     this.cellData.depth = 1;
     this.cellData.on("pointerdown", function(pointer) {
       if (this.tintBottomLeft != 7368031) { // need to define a variable for turned-off color.
@@ -36,10 +37,7 @@ export default class Mole extends Phaser.GameObjects.Sprite {
     });
   }
 
-  onClickListener(sender) {}
-
   update() {
-    // Get called from main.js update
-    // this.angle += 0.1;
+    
   }
 }

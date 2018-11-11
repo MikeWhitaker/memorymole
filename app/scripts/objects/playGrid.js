@@ -85,7 +85,6 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
       var gridArray = vm.gameGrid.getGridArray();
       for (let i = 0; i < rowAmount; i++) {
         var row = new Row(columnAmount, i);
-        gridArray.push(row);
       }
     }
     activate();
@@ -95,6 +94,8 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
    *  Increment the angle smoothly.
    */
   update() {
+    this.grid.gameGrid.getGridArray(); // this should not be an array of row but an array of moles.
+
     // Get called from main.js update
     // this.angle += 0.1;
   }
