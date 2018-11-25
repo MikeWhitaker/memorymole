@@ -35,6 +35,10 @@ export default class Mole extends Phaser.GameObjects.Sprite {
         this.setTint();
       }
     });
+    
+    this.disableInteractive = function (){
+      this.cellData.disableInteractive();
+    };
   }
 
   update() {

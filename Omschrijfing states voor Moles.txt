@@ -1,0 +1,22 @@
+Volgorde van de states
+	initial
+	DEACTIVATED
+	ACTIVE_PATTERN
+	WAITING_INPUT
+		-> ACTIVATED
+		-> GAME_OVER
+			
+	Van uit de initial state (wat niets is),
+		gaan we naar de DEACTIVATED state. 
+		In de DEACTIVATED state is de mole uit.
+		
+		Dan gaan we naar de ACTIVE_PATTERN in deze state staat de mole aan en 
+		telt er een interne teller af naar 0 dan gaat hij naar ->
+		
+		WAITING_INPUT:
+		In de WAITING_INPUT state loop er ook een timer. Wanner deze af loop is het
+		spel voorbij. 
+		in deze mode staat hij uit maar kun je er op klikken (clickActiveMole) en dan gaat de state machine naar
+		ACTIVATED.
+		
+		In de ACTIVATED state zou er eventueel naar de de reset state kunnen

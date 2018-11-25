@@ -9,6 +9,8 @@ export default class Main extends Phaser.Scene {
    */
   constructor() {
     super({key: 'Main'});
+    // so I feel that this is the place that should have the state machine.
+    // I need to examine the state machine javascript in a separate project.
   }
 
   /**
