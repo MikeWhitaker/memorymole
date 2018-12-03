@@ -24,14 +24,15 @@ export default class Demo extends Phaser.Scene {
     this.grid = this.add.existing(new PlayGrid(this));
     this.moles = this.grid.gameGrid.getListOfCells();
     this.moles.forEach(mole => {
-      mole.disableInteractive();
+      mole.create();
+      mole.moleState.goDemo();
     });
 
     this.visibleAnimation = {
       moleCounter: 0,
       lastVisibleSetMole: {},
       moleResetOn: 11
-    }
+    };
 
     var sceneClickedHandler = function () { // needs to be loaded in first as it is not hoisted.
       this.scene.start('Main');

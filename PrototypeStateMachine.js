@@ -1,5 +1,6 @@
-var machina = require("machina");
+('use strict');
 
+var machina = require("machina");
 var moleState = new machina.Fsm({
   initialize: function(options) {},
   namespace: "mole-state",
