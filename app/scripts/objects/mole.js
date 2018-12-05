@@ -12,7 +12,90 @@ export default class Mole extends Phaser.GameObjects.Sprite {
 
     // 600 x gives 200 per mole
     // 900 y gives 225 per mole
-    var moleState = {};
+    var moleState = new machina.Fsm({
+      initialize: function(options) {},
+      namespace: "mole-state",
+      initialState: "uninitialized",
+      ActiveCountDown: 1000,
+      states: {
+        uninitialized: {
+          "*": function() {
+            this.deferUntilTransition();
+            this.transition("DEACTIVATED");
+          }
+        },
+        DEACTIVATED: {
+          _onEnter: function() {
+            this.emit("DEACTIVATED");
+            this.transition("WAITING-INPUT");
+          },
+          _onExit: function() {}
+        },
+        "ACTIVE-PATTERN": {
+          _onEnter: function() {
+            this.timer = setTimeout(
+              function() {
+                this.handle("timeout");
+              }.bind(this),
+              this.ActiveCountDown
+            );
+            this.emit("ACTIVE-PATTERN");
+          },
+          timeout: "WAITING-INPUT",
+          _onExit: function() {
+            clearTimeout(this.timer);
+          }
+        },
+        "WAITING-INPUT": {
+          _onEnter: function() {
+            this.emit("WAITING-INPUT");
+          },
+          ACTIVATED: "ACTIVATED",
+          _onExit: function() {
+            clearTimeout(this.timer);
+          }
+        },
+        ACTIVATED: {
+          _onEnter: function() {
+            this.emit("ACTIVATED"); // The triggered event needs to reduce the 'to hit' mole list
+          },
+          _onExit: function() {}
+        },
+        "GAME-OVER": {
+          _onEnter: function() {
+            this.emit("GAME-OVER", { status: "GAME-OVER" });
+          },
+          _onExit: function() {}
+        }
+      },
+      clickMole: function() {
+        this.handle("ACTIVATED");
+      },
+      go: function() {
+        this.handle("DEACTIVATED");
+      }
+    });
+
+    moleState.go(); //initialize the state machine
+
+    moleState.on("DEACTIVATED", function() {});
+
+    moleState.on("ACTIVE-PATTERN", function() {
+      // if it has been selected as part of the target moles then light it up for a specified time
+      this.cellData.setTint();
+    });
+    moleState.on("WAITING-INPUT", function() {
+      debugger;
+      this.cellData.setTint(0x5f6d70);
+    });
+    moleState.on("GAME-OVER", function() {});
+    moleState.on("ACTIVATED", function() {
+      // need to define a variable for turned-off color.
+      debugger;
+      this.cellData.setTint(0x5f6d70);
+    });
+    moleState.on("GAME-OVER", function() {});
+
     this.tileWidth = 196.6;
     this.tileHight = 222.5;
     this.gridPosX = gridX;
@@ -29,13 +112,11 @@ export default class Mole extends Phaser.GameObjects.Sprite {
       .setInteractive();
 
     this.cellData.depth = 1;
+    this.cellData.moleState = moleState;
+    moleState.cellData = this.cellData;
+
     this.cellData.on("pointerdown", function(pointer) {
-      if (this.tintBottomLeft != 7368031) {
-        // need to define a variable for turned-off color.
-        this.setTint(0x5f6d70);
-      } else {
-        this.setTint();
-      }
+      this.moleState.clickMole();
     });
 
     this.disableInteractive = function() {
@@ -43,60 +124,7 @@ export default class Mole extends Phaser.GameObjects.Sprite {
     };
   }
 
-  create() {
-    // defining the stateMachine on the mole
-    this.moleState = new machina.Fsm({
-      initialize: function(options) {},
-      namespace: "mole-state",
-      initialState: "uninitialized",
-      ActiveCountDown: 1000,
-      states: {
-        uninitialized: {
-          "*": function() {
-            this.deferUntilTransition();
-            this.transition("DEACTIVATED");
-          }
-        },
-        DEACTIVATED: {
-          _onEnter: function() {
-            this.emit("DEACTIVATED");
-          },
-          _onExit: function() {}
-        },
-        "WAITING-INPUT": {
-          _onEnter: function() {
-            this.emit("WAITING-INPUT");
-          },
-          activate: "GAME-OVER",
-          _onExit: function() {}
-        },
-        ACTIVATED: {
-          _onEnter: function() {
-            this.emit("ACTIVATED"); // The triggered event needs to reduce the 'to hit' mole list
-          },
-          _onExit: function() {}
-        },
-        "GAME-OVER": {
-          _onEnter: function() {
-            this.emit("GAME-OVER", { status: "GAME-OVER" });
-          },
-          _onExit: function() {}
-        }
-      },
-      clickActiveMole: function() {
-        this.handle("ACTIVATED");
-      },
-      go: function() {
-        this.handle("DEACTIVATED");
-      }
-    });
-
-    this.moleState.on("DEACTIVATED", function() {});
-    this.moleState.on("WAITING-INPUT", function() {});
-    this.moleState.on("GAME-OVER", function() {});
-    this.moleState.on("ACTIVATED", function() {});
-    this.moleState.on("GAME-OVER", function() {});
-  }
+  create() {}
 
   update() {}
 }

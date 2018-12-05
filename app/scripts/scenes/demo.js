@@ -25,7 +25,6 @@ export default class Demo extends Phaser.Scene {
     this.moles = this.grid.gameGrid.getListOfCells();
     this.moles.forEach(mole => {
       mole.create();
-      mole.moleState.goDemo();
     });
 
     this.visibleAnimation = {
