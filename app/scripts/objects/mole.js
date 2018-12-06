@@ -27,33 +27,15 @@ export default class Mole extends Phaser.GameObjects.Sprite {
         DEACTIVATED: {
           _onEnter: function() {
             this.emit("DEACTIVATED");
-            this.transition("WAITING-INPUT");
+            this.transition("WAITINGINPUT");
           },
           _onExit: function() {}
         },
-        "ACTIVE-PATTERN": {
+        WAITINGINPUT: {
           _onEnter: function() {
-            this.timer = setTimeout(
-              function() {
-                this.handle("timeout");
-              }.bind(this),
-              this.ActiveCountDown
-            );
-            this.emit("ACTIVE-PATTERN");
+            this.emit("WAITINGINPUT");
           },
-          timeout: "WAITING-INPUT",
-          _onExit: function() {
-            clearTimeout(this.timer);
-          }
-        },
-        "WAITING-INPUT": {
-          _onEnter: function() {
-            this.emit("WAITING-INPUT");
-          },
-          ACTIVATED: "ACTIVATED",
-          _onExit: function() {
-            clearTimeout(this.timer);
-          }
+          ACTIVATED: "ACTIVATED"
         },
         ACTIVATED: {
           _onEnter: function() {
@@ -76,23 +58,16 @@ export default class Mole extends Phaser.GameObjects.Sprite {
       }
     });
 
-    moleState.go(); //initialize the state machine
-
-    moleState.on("DEACTIVATED", function() {});
-
-    moleState.on("ACTIVE-PATTERN", function() {
-      // if it has been selected as part of the target moles then light it up for a specified time
-      this.cellData.setTint();
+    moleState.on("DEACTIVATED", function() {
     });
-    moleState.on("WAITING-INPUT", function() {
-      debugger;
+
+    moleState.on("WAITINGINPUT", function() {
+      console.log("entered WAITINGINPUT");
       this.cellData.setTint(0x5f6d70);
     });
-    moleState.on("GAME-OVER", function() {});
+
     moleState.on("ACTIVATED", function() {
-      // need to define a variable for turned-off color.
-      debugger;
-      this.cellData.setTint(0x5f6d70);
+      this.cellData.setTint();
     });
     moleState.on("GAME-OVER", function() {});
 
@@ -122,6 +97,11 @@ export default class Mole extends Phaser.GameObjects.Sprite {
     this.disableInteractive = function() {
       this.cellData.disableInteractive();
     };
+
+    // done initilizing. 
+    // Start the mole state machine.
+
+    moleState.go(); //initialize the state machine
   }
 
   create() {}
