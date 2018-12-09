@@ -11,6 +11,7 @@ export default class Main extends Phaser.Scene {
     super({key: 'Main'});
     // so I feel that this is the place that should have the state machine.
     // I need to examine the state machine javascript in a separate project.
+    var amountOfTargets = 3;
   }
 
   /**
@@ -21,9 +22,22 @@ export default class Main extends Phaser.Scene {
    *  @param {object} data Initialization parameters.
    */
   create(/* data */) {
-    //  TODO: Replace this content with really cool game code here :)
+    debugger;
+    function setTargetMoles(gridArray) {
+      //shuffle the array
+      var shuffledArray = _.shuffle(gridArray);
+      
+      var targets = _.slice(shuffledArray, 0, 1); // This should be getting an variable ammount of moles instead of just two
+      _.each(targets, function(target) {
+        target.targetMole = true;
+      });
+    }
+    
     this.grid = this.add.existing(new PlayGrid(this));
-    // this.aMole = this.add.existing(new Mole(this, 2, 2));
+    this.moles = this.grid.gameGrid.getListOfCells();
+    
+    setTargetMoles(this.moles);
+    _(this.moles).each(s => s.cellData.moleState.go());
   }
 
   /**

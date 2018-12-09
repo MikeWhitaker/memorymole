@@ -34,6 +34,8 @@ export default class Demo extends Phaser.Scene {
     };
 
     var sceneClickedHandler = function () { // needs to be loaded in first as it is not hoisted.
+      delete this.grid;
+      delete this.moles;
       this.scene.start('Main');
     };
 

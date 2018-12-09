@@ -1,3 +1,4 @@
+/* global _ */
 import Mole from "./Mole";
 import { create } from "domain";
 
@@ -60,13 +61,16 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
     var Row = function(xSize, yCurrentRow) {
       var row = [];
       var gameGrid = vm.gameGrid.getListOfCells();
+
       for (let i = 0; i < xSize; i++) {
         // pop a reference to the cell in a list as well for convenience
         //this.aMole = this.add.existing(new Mole(this));
         var mole = scene.add.existing(new Mole(scene, i, yCurrentRow));
+        //We will do the randomize assign of the target mole here.
 
         gameGrid.push(mole);
       }
+      vm.gameGrid.setGridArray(gameGrid);
 
       var getRow = function() {
         return row;

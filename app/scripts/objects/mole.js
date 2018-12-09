@@ -1,4 +1,5 @@
 ("use strict");
+/*eslint quotes: ["error", "double"]*/
 export default class Mole extends Phaser.GameObjects.Sprite {
   /**
    *  A simple prefab (extended game object class), displaying a spinning
@@ -16,7 +17,7 @@ export default class Mole extends Phaser.GameObjects.Sprite {
       initialize: function(options) {},
       namespace: "mole-state",
       initialState: "uninitialized",
-      ActiveCountDown: 1000,
+      ActiveCountDown: 2000,
       states: {
         uninitialized: {
           "*": function() {
@@ -27,9 +28,25 @@ export default class Mole extends Phaser.GameObjects.Sprite {
         DEACTIVATED: {
           _onEnter: function() {
             this.emit("DEACTIVATED");
+            if (!this.targetMole) {
+              this.transition("ACTIVEPATTERN");
+            }
             this.transition("WAITINGINPUT");
           },
+          ACTIVEPATTERN: "ACTIVEPATTERN",
           _onExit: function() {}
+        },
+        ACTIVEPATTERN: {
+          _onEnter: function() {
+            this.emit("ACTIVEPATTERN");
+            this.timer = setTimeout(
+              function() {
+                this.handle("timeout");
+              }.bind(this),
+              1000
+            );
+          },
+          timeout: "WAITINGINPUT"
         },
         WAITINGINPUT: {
           _onEnter: function() {
@@ -58,11 +75,13 @@ export default class Mole extends Phaser.GameObjects.Sprite {
       }
     });
 
-    moleState.on("DEACTIVATED", function() {
+    moleState.on("DEACTIVATED", function() {});
+
+    moleState.on("ACTIVEPATTERN", function() {
+      this.cellData.setTint();
     });
 
     moleState.on("WAITINGINPUT", function() {
-      console.log("entered WAITINGINPUT");
       this.cellData.setTint(0x5f6d70);
     });
 
@@ -70,6 +89,8 @@ export default class Mole extends Phaser.GameObjects.Sprite {
       this.cellData.setTint();
     });
     moleState.on("GAME-OVER", function() {});
+
+    this.targetMole = false;
 
     this.tileWidth = 196.6;
     this.tileHight = 222.5;
@@ -88,6 +109,7 @@ export default class Mole extends Phaser.GameObjects.Sprite {
 
     this.cellData.depth = 1;
     this.cellData.moleState = moleState;
+    moleState.targetMole = this.targetMole;
     moleState.cellData = this.cellData;
 
     this.cellData.on("pointerdown", function(pointer) {
@@ -98,10 +120,10 @@ export default class Mole extends Phaser.GameObjects.Sprite {
       this.cellData.disableInteractive();
     };
 
-    // done initilizing. 
+    // done initilizing.
     // Start the mole state machine.
 
-    moleState.go(); //initialize the state machine
+    
   }
 
   create() {}
