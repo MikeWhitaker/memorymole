@@ -28,10 +28,11 @@ export default class Mole extends Phaser.GameObjects.Sprite {
         DEACTIVATED: {
           _onEnter: function() {
             this.emit("DEACTIVATED");
-            if (!this.targetMole) {
+            if (this.targetMole) {
               this.transition("ACTIVEPATTERN");
+            } else {
+              this.transition("WAITINGINPUT");
             }
-            this.transition("WAITINGINPUT");
           },
           ACTIVEPATTERN: "ACTIVEPATTERN",
           _onExit: function() {}
@@ -89,8 +90,6 @@ export default class Mole extends Phaser.GameObjects.Sprite {
       this.cellData.setTint();
     });
     moleState.on("GAME-OVER", function() {});
-
-    this.targetMole = false;
 
     this.tileWidth = 196.6;
     this.tileHight = 222.5;

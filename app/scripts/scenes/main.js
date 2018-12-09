@@ -22,21 +22,25 @@ export default class Main extends Phaser.Scene {
    *  @param {object} data Initialization parameters.
    */
   create(/* data */) {
-    debugger;
-    function setTargetMoles(gridArray) {
+    function setTargetMoles(moleArray) {
       //shuffle the array
-      var shuffledArray = _.shuffle(gridArray);
+      var shuffledArray = _.shuffle(moleArray);
       
-      var targets = _.slice(shuffledArray, 0, 1); // This should be getting an variable ammount of moles instead of just two
+      var targets = _.slice(shuffledArray, 0, 2); // This should be getting an variable ammount of moles instead of just two
       _.each(targets, function(target) {
         target.targetMole = true;
       });
+      _.each(moleArray, function(item){
+        // console.log('targetMole: ', item.targetMole);
+      })
     }
     
     this.grid = this.add.existing(new PlayGrid(this));
     this.moles = this.grid.gameGrid.getListOfCells();
     
-    setTargetMoles(this.moles);
+    // setTargetMoles(this.moles);
+    this.moles[4].cellData.moleState.targetMole = true;
+    this.moles[2].cellData.moleState.targetMole = true;
     _(this.moles).each(s => s.cellData.moleState.go());
   }
 
