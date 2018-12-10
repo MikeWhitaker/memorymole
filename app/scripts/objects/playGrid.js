@@ -27,6 +27,80 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
       var dimensions = null;
       var listOfCells = [];
 
+      var gridState = new machina.Fsm({
+        initialize: function(options) {},
+        namespace: "grid-state",
+        initialState: "uninitialized",
+        gameOverCountDown: 1000,
+        states: {
+          uninitialized: {
+            "*": function() {
+              this.deferUntilTransition();
+              this.transition("NORMAL");
+            }
+          },
+          NORMAL: {
+            _onEnter: function() {
+              this.emit("NORMAL");
+              this.timer = setTimeout(
+                function() {
+                  this.handle("GAMEOVER");
+                }.bind(this),
+                this.gameOverCountDown
+              );
+            },
+            GAMEOVER: "GAMEOVER",
+            WINROUND: "WINROUND",
+            _onExit: function() {}
+          },
+          ACTIVEPATTERN: {
+            _onEnter: function() {
+              this.emit("ACTIVEPATTERN");
+              this.timer = setTimeout(
+                function() {
+                  this.handle("timeout");
+                }.bind(this),
+                this.ActiveCountDown
+              );
+            },
+            timeout: "WAITINGINPUT"
+          },
+          GAMEOVER: {
+            _onEnter: function() {
+              this.emit("GAMEOVER", { status: "GAMEOVER" });
+              // this.timer = setTimeout(
+              //   function() {
+              //     this.handle("timeout");
+              //   }.bind(this),
+              //   this.ActiveCountDown
+              // );
+            },
+            _onExit: function() {}
+          },
+          WINROUND: {
+            _onEnter: function() {
+              this.emit("WINROUND", { status: "WINROUND" });
+            },
+            _onExit: function() {}
+          }
+        },
+        go: function() {
+          this.handle("DEACTIVATED");
+        }
+      });
+
+      gridState.on("NORMAL", function() { //normal might not be a great name for this state as it is not explicit
+        this.imageData.setTint();
+      });
+
+      gridState.on("WINROUND", function() {
+        this.imageData.setTint(0x00ff00);
+      });
+
+      gridState.on("GAMEOVER", function() {
+        this.imageData.setTint(0xff0000);
+      });
+
       var Dimensions = function(row, col) {
           var x = col;
           var y = row;
@@ -46,6 +120,9 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
         },
         getListOfCells = function() {
           return listOfCells;
+        },
+        getGridState = function() {
+          return gridState;
         };
 
       dimensions = new Dimensions(ySize, xSize);
@@ -54,7 +131,8 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
         getDimensions: getDimensions,
         getGridArray: getGridArray,
         getListOfCells: getListOfCells,
-        setGridArray: setGridArray
+        setGridArray: setGridArray,
+        getGridState: getGridState
       };
     };
 
@@ -98,8 +176,7 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
    *  Increment the angle smoothly.
    */
   update() {
-    this.grid.gameGrid.getGridArray(); // this should not be an array of row but an array of moles.
-
+    // this should not be an array of row but an array of moles.
     // Get called from main.js update
     // this.angle += 0.1;
   }

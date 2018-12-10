@@ -17,7 +17,7 @@ export default class Mole extends Phaser.GameObjects.Sprite {
       initialize: function(options) {},
       namespace: "mole-state",
       initialState: "uninitialized",
-      ActiveCountDown: 2000,
+      ActiveCountDown: 1500,
       states: {
         uninitialized: {
           "*": function() {
@@ -44,7 +44,7 @@ export default class Mole extends Phaser.GameObjects.Sprite {
               function() {
                 this.handle("timeout");
               }.bind(this),
-              1000
+              this.ActiveCountDown
             );
           },
           timeout: "WAITINGINPUT"
