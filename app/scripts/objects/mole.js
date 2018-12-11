@@ -31,7 +31,7 @@ export default class Mole extends Phaser.GameObjects.Sprite {
             if (this.targetMole) {
               this.transition("ACTIVEPATTERN");
             } else {
-              this.transition("WAITINGINPUT");
+              this.transition("DISABLEDINPUT");
             }
           },
           ACTIVEPATTERN: "ACTIVEPATTERN",
@@ -40,6 +40,19 @@ export default class Mole extends Phaser.GameObjects.Sprite {
         ACTIVEPATTERN: {
           _onEnter: function() {
             this.emit("ACTIVEPATTERN");
+            this.timer = setTimeout(
+              function() {
+                this.handle("timeout");
+              }.bind(this),
+              this.ActiveCountDown
+            );
+          },
+          timeout: "WAITINGINPUT"
+        },
+        DISABLEDINPUT: {
+          _onEnter: function() {
+
+            this.emit("DISABLEDINPUT");
             this.timer = setTimeout(
               function() {
                 this.handle("timeout");
@@ -80,6 +93,10 @@ export default class Mole extends Phaser.GameObjects.Sprite {
 
     moleState.on("ACTIVEPATTERN", function() {
       this.cellData.setTint();
+    });
+
+    moleState.on("DISABLEDINPUT", function() {
+      this.cellData.setTint(0x5f6d70);
     });
 
     moleState.on("WAITINGINPUT", function() {
