@@ -31,7 +31,8 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
         initialize: function(options) {},
         namespace: "grid-state",
         initialState: "uninitialized",
-        gameOverCountDown: 1000,
+        gameOverCountDown: 10000,
+        startNewGameTimer: 3000,
         states: {
           uninitialized: {
             "*": function() {
@@ -68,12 +69,15 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
           GAMEOVER: {
             _onEnter: function() {
               this.emit("GAMEOVER", { status: "GAMEOVER" });
-              // this.timer = setTimeout(
-              //   function() {
-              //     this.handle("timeout");
-              //   }.bind(this),
-              //   this.ActiveCountDown
-              // );
+              this.timer = setTimeout(
+                function() {
+                  this.handle("timeout");
+                }.bind(this),
+                this.startNewGameTimer
+              );
+            },
+            timeout: function() {
+              this.scene.start('Demo');
             },
             _onExit: function() {}
           },

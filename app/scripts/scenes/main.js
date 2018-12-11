@@ -38,6 +38,7 @@ export default class Main extends Phaser.Scene {
     this.grid = this.add.existing(new PlayGrid(this));
     var gridFSM = this.grid.gameGrid.getGridState();
     gridFSM.imageData = this.grid;
+    gridFSM.scene = this.scene;
     gridFSM.go();
     this.moles = this.grid.gameGrid.getListOfCells();
     
