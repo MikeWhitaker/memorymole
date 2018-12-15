@@ -31,8 +31,9 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
         initialize: function(options) {},
         namespace: "grid-state",
         initialState: "uninitialized",
-        gameOverCountDown: 10000,
+        gameOverCountDown: 4000,
         startNewGameTimer: 3000,
+        startNewRoundTimer: 1500,
         states: {
           uninitialized: {
             "*": function() {
@@ -77,23 +78,39 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
               );
             },
             timeout: function() {
-              this.scene.start('Demo');
+              this.scene.start("Demo");
             },
             _onExit: function() {}
           },
           WINROUND: {
             _onEnter: function() {
               this.emit("WINROUND", { status: "WINROUND" });
+              this.timer = setTimeout(
+                function() {
+                  this.handle("timeout");
+                }.bind(this),
+                this.startNewRoundTimer
+              );
+            },
+            timeout: function() {
+              this.scene.start("Main");
             },
             _onExit: function() {}
           }
         },
         go: function() {
           this.handle("DEACTIVATED");
+        },
+        gameOver: function() {
+          this.handle("GAMEOVER");
+        },
+        winRound: function() {
+          this.handle("WINROUND");
         }
       });
 
-      gridState.on("NORMAL", function() { //normal might not be a great name for this state as it is not explicit
+      gridState.on("NORMAL", function() {
+        //normal might not be a great name for this state as it is not explicit
         this.imageData.setTint();
       });
 
@@ -168,6 +185,7 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
       var rowAmount = 4; // total of 12 cells
 
       vm.gameGrid = new Grid(columnAmount, rowAmount);
+      scene.gameGrid = vm.gameGrid;
       var gridArray = vm.gameGrid.getGridArray();
       for (let i = 0; i < rowAmount; i++) {
         var row = new Row(columnAmount, i);
@@ -176,12 +194,5 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
     activate();
   }
 
-  /**
-   *  Increment the angle smoothly.
-   */
-  update() {
-    // this should not be an array of row but an array of moles.
-    // Get called from main.js update
-    // this.angle += 0.1;
-  }
+  update() {}
 }

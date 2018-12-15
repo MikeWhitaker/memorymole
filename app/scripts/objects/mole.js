@@ -70,13 +70,17 @@ export default class Mole extends Phaser.GameObjects.Sprite {
         },
         ACTIVATED: {
           _onEnter: function() {
+            if(!this.targetMole){
+              this.handle("GAMEOVER");
+            }
             this.emit("ACTIVATED"); // The triggered event needs to reduce the 'to hit' mole list
           },
+          GAMEOVER: "GAMEOVER",
           _onExit: function() {}
         },
-        "GAME-OVER": {
+        "GAMEOVER": {
           _onEnter: function() {
-            this.emit("GAME-OVER", { status: "GAME-OVER" });
+            this.emit("GAMEOVER", { status: "GAMEOVER" });
           },
           _onExit: function() {}
         }
@@ -105,8 +109,19 @@ export default class Mole extends Phaser.GameObjects.Sprite {
 
     moleState.on("ACTIVATED", function() {
       this.cellData.setTint();
+      this.targetMole = false;
+      let moles = scene.gameGrid.getListOfCells();
+      // debugger;
+      var validTargetMoles = _(moles).find(s => s.cellData.moleState.targetMole === true);
+      if(!validTargetMoles){
+        let gridState = scene.gameGrid.getGridState();
+        gridState.winRound(); 
+      }
     });
-    moleState.on("GAME-OVER", function() {});
+    moleState.on("GAMEOVER", function() {
+      let gridState = scene.gameGrid.getGridState();
+      gridState.gameOver();
+    });
 
     this.tileWidth = 196.6;
     this.tileHight = 222.5;

@@ -11,7 +11,8 @@ export default class Main extends Phaser.Scene {
     super({key: 'Main'});
     // so I feel that this is the place that should have the state machine.
     // I need to examine the state machine javascript in a separate project.
-    var amountOfTargets = 3;
+    this.amountOfTargets = 2;
+    this.sceneLinker = this.sceneLinker || {};
   }
 
   /**
@@ -22,17 +23,13 @@ export default class Main extends Phaser.Scene {
    *  @param {object} data Initialization parameters.
    */
   create(/* data */) {
-    function setTargetMoles(moleArray) {
+    function setTargetMoles(moleArray, amountOfTargets) {
       //shuffle the array
       var shuffledArray = _.shuffle(moleArray);
-      
-      var targets = _.slice(shuffledArray, 0, 2); // This should be getting an variable ammount of moles instead of just two
+      var targets = _(shuffledArray).take(amountOfTargets).value(); // This should be getting an variable ammount of moles instead of just two
       _.each(targets, function(target) {
-        target.targetMole = true;
+        target.cellData.moleState.targetMole = true;
       });
-      _.each(moleArray, function(item){
-        // console.log('targetMole: ', item.targetMole);
-      })
     }
     
     this.grid = this.add.existing(new PlayGrid(this));
@@ -42,9 +39,11 @@ export default class Main extends Phaser.Scene {
     gridFSM.go();
     this.moles = this.grid.gameGrid.getListOfCells();
     
-    // setTargetMoles(this.moles);
-    this.moles[4].cellData.moleState.targetMole = true;
-    this.moles[2].cellData.moleState.targetMole = true;
+    
+    /* It would be cool if we could make the amount (lower than 12) random.
+       It should be based on a level number (0 to 4) + 2 so it starts with 2 and go to 6
+    */
+    setTargetMoles(this.moles, this.amountOfTargets);
     _(this.moles).each(s => s.cellData.moleState.go());
   }
 
