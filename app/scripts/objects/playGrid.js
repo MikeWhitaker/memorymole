@@ -116,6 +116,8 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
 
       gridState.on("WINROUND", function() {
         this.imageData.setTint(0x00ff00);
+        // increment the amount of moles
+
       });
 
       gridState.on("GAMEOVER", function() {

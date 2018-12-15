@@ -36,6 +36,10 @@ export default class SplashScreen extends Phaser.Scene {
     //  HINT: Declare all game assets to be loaded here.
     window._ = require('lodash');
     window.machina = require('machina');
+    window.gameMoleLevel =  {
+      level: 0,
+      faze: 0
+    }
 
     this.load.image('playGrid');
     this.load.image('moleIcon');
