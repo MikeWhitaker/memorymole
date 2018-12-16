@@ -117,11 +117,23 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
       gridState.on("WINROUND", function() {
         this.imageData.setTint(0x00ff00);
         // increment the amount of moles
-
+        //Handle the level and round
+        if (gameMoleLevel.round > 0){
+          if (gameMoleLevel.level < 4){
+            gameMoleLevel.level++;
+            gameMoleLevel.round = 0;
+          }
+        } else {
+          gameMoleLevel.round++
+        }
       });
 
       gridState.on("GAMEOVER", function() {
         this.imageData.setTint(0xff0000);
+        gameMoleLevel =  {
+          level: 0,
+          round: 0
+        };
       });
 
       var Dimensions = function(row, col) {
@@ -184,7 +196,7 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
 
     function activate() {
       var columnAmount = 3;
-      var rowAmount = 4; // total of 12 cells
+      var rowAmount = 4; // total of 12 cells, its ok te define here as the size of the grid wont change.
 
       vm.gameGrid = new Grid(columnAmount, rowAmount);
       scene.gameGrid = vm.gameGrid;

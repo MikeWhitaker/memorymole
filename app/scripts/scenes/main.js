@@ -11,8 +11,6 @@ export default class Main extends Phaser.Scene {
     super({key: 'Main'});
     // so I feel that this is the place that should have the state machine.
     // I need to examine the state machine javascript in a separate project.
-    this.amountOfTargets = 2;
-    this.sceneLinker = this.sceneLinker || {};
   }
 
   /**
@@ -43,6 +41,9 @@ export default class Main extends Phaser.Scene {
     /* It would be cool if we could make the amount (lower than 12) random.
        It should be based on a level number (0 to 4) + 2 so it starts with 2 and go to 6
     */
+    this.amountOfTargets = gameMoleLevel.level + 2; //Magic number
+    
+
     setTargetMoles(this.moles, this.amountOfTargets);
     _(this.moles).each(s => s.cellData.moleState.go());
   }
