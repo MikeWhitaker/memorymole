@@ -1,3 +1,6 @@
+('use strict');
+/* global require*/
+
 export default class SplashScreen extends Phaser.Scene {
   /**
    *  Takes care of loading the main game assets, including textures, tile

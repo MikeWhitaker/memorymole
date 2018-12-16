@@ -1,3 +1,7 @@
+('use strict');
+/* global _ */
+/* global gameMoleLevel */
+
 import PlayGrid from '@/objects/PlayGrid';
 //import Mole from '@/objects/Mole';
 

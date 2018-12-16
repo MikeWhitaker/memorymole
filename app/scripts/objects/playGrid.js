@@ -1,6 +1,11 @@
-/* global _ */
+("use strict");
+/*eslint quotes: ["error", "double"]*/
+/*eslint no-global-assign: "off"*/
+/*eslint no-unused-vars: "off"*/
+/* global gameMoleLevel */
+/* global machina*/
+
 import Mole from "./Mole";
-import { create } from "domain";
 
 export default class PlayGrid extends Phaser.GameObjects.Sprite {
   /**
@@ -28,7 +33,7 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
       var listOfCells = [];
 
       var gridState = new machina.Fsm({
-        initialize: function(options) {},
+        initialize: function() {},
         namespace: "grid-state",
         initialState: "uninitialized",
         gameOverCountDown: 4000,
@@ -124,7 +129,7 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
             gameMoleLevel.round = 0;
           }
         } else {
-          gameMoleLevel.round++
+          gameMoleLevel.round++;
         }
       });
 

@@ -1,5 +1,8 @@
 ("use strict");
 /*eslint quotes: ["error", "double"]*/
+/* global _ */
+/* global machina*/
+
 export default class Mole extends Phaser.GameObjects.Sprite {
   /**
    *  A simple prefab (extended game object class), displaying a spinning
@@ -14,7 +17,7 @@ export default class Mole extends Phaser.GameObjects.Sprite {
     // 600 x gives 200 per mole
     // 900 y gives 225 per mole
     var moleState = new machina.Fsm({
-      initialize: function(options) {},
+      initialize: function() {},
       namespace: "mole-state",
       initialState: "uninitialized",
       ActiveCountDown: 1500,
@@ -143,7 +146,7 @@ export default class Mole extends Phaser.GameObjects.Sprite {
     moleState.targetMole = this.targetMole;
     moleState.cellData = this.cellData;
 
-    this.cellData.on("pointerdown", function(pointer) {
+    this.cellData.on("pointerdown", function() {
       this.moleState.clickMole();
     });
 
