@@ -1,24 +1,30 @@
-export default class Logo extends Phaser.GameObjects.Sprite {
+export default class TimeOutBar extends Phaser.GameObjects.Sprite {
   /**
    *  A simple prefab (extended game object class), displaying a spinning
    *  Phaser 3 logo.
    *
    *  @extends Phaser.GameObjects.Sprite
    */
-  constructor(scene) {
-    super(scene, 0, 0, 'logo');
-
-    const x = scene.cameras.main.width / 2;
-    const y = scene.cameras.main.height / 2;
+  constructor(scene, x, y) {
+    super(scene, 0, 0, "timeOutBar");
 
     this.setPosition(x, y);
-    this.setOrigin(0.5);
+    this.setOrigin(0,0);
+    this.width = 600;
+    this.maxTimeInMilliSec = 4000;
+    this.onePercentOfMaxTime = this.maxTimeInMilliSec / 100
+    this.maxTimeInMilliSec / 100;
   }
 
-  /**
-   *  Increment the angle smoothly.
-   */
-  update() {
-    this.angle += 0.1;
+  update(t) {
+    //set percent bar
+    this.initialTime = this.initialTime || t;
+
+    let elapsedTime = t - this.initialTime; // time since first run
+    let percentElapsed = elapsedTime / this.onePercentOfMaxTime;
+    let percentRemaining = 100 - percentElapsed;
+    let fractureRemaining = percentRemaining / 100;
+    this.displayWidth = this.width * fractureRemaining;
+
   }
 }

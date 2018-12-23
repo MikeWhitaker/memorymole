@@ -3,7 +3,8 @@
 /* global gameMoleLevel */
 
 import PlayGrid from "@/objects/PlayGrid";
-//import Mole from '@/objects/Mole';
+import TimeOutBar from "@/objects/TimeOutBar";
+
 
 export default class Main extends Phaser.Scene {
   /**
@@ -43,17 +44,11 @@ export default class Main extends Phaser.Scene {
     gridFSM.scene = this.scene;
     gridFSM.go();
     this.moles = this.grid.gameGrid.getListOfCells();
+    
+    this.amountOfTargets = gameMoleLevel.level + 2; //Magic number
 
     //set percent bar 
-    this.timeOutBar = this.add.image(0, 895, "timeOutBar");
-    this.timeOutBar.Width = 600;
-    this.timeOutBar.hundredPercentWidth = 600;
-    this.timeOutBar.setOrigin(0,0);
-    this.timeOutBar.maxTimeInMilliSec = 4000;
-    this.timeOutBar.onePercentOfMaxTime = this.timeOutBar.maxTimeInMilliSec / 100;
-
-  
-    this.amountOfTargets = gameMoleLevel.level + 2; //Magic number
+    this.timeOutBar = this.add.existing(new TimeOutBar(this, 0, 895));
 
     setTargetMoles(this.moles, this.amountOfTargets);
     _(this.moles).each(s => s.cellData.moleState.go());
@@ -68,14 +63,9 @@ export default class Main extends Phaser.Scene {
    *  @param {number} dt Time elapsed since last update.
    */
   update(t) {
-    this.initialTime = this.initialTime || t;
-    var elapsedTime = t - this.initialTime; // time since first run
-    var percentElapsed = elapsedTime / this.timeOutBar.onePercentOfMaxTime;
-    var percentRemaining = 100 - percentElapsed;
-    var fractureRemaining = percentRemaining / 100;
-    this.timeOutBar.displayWidth = this.timeOutBar.hundredPercentWidth * fractureRemaining;
-    if (elapsedTime > 3000) {
-      debugger;
-    }
+    this.timeOutBar.update(t);
+
+    
+    
   }
 }
