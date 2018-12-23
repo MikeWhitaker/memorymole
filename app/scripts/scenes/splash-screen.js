@@ -47,6 +47,7 @@ export default class SplashScreen extends Phaser.Scene {
 
     this.load.image('playGrid');
     this.load.image('moleIcon');
+    this.load.image('timeOutBar');
   }
 
   /**
