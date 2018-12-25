@@ -1,3 +1,7 @@
+("use strict");
+/*eslint quotes: ["error", "double"]*/
+/* global machina*/
+
 export default class TimeOutBar extends Phaser.GameObjects.Sprite {
   /**
    *  A simple prefab (extended game object class), displaying a spinning
@@ -45,7 +49,7 @@ export default class TimeOutBar extends Phaser.GameObjects.Sprite {
 
   update(t) {
     //set percent bar
-    if (this.timeOutBarState.state === 'RUNNING') {
+    if (this.timeOutBarState.state === "RUNNING") {
       this.initialTime = this.initialTime || t;
 
       let elapsedTime = t - this.initialTime; // time since first run

@@ -1,6 +1,7 @@
 ("use strict");
 /* global _ */
 /* global gameMoleLevel */
+/*eslint quotes: ["error", "double"]*/
 
 import PlayGrid from "@/objects/PlayGrid";
 import TimeOutBar from "@/objects/TimeOutBar";

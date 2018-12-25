@@ -123,8 +123,13 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
         this.imageData.setTint(0x00ff00);
         // increment the amount of moles
         //Handle the level and round
-        if (gameMoleLevel.round > 0){
-          if (gameMoleLevel.level < 4){
+        let moles = vm.gameGrid.getListOfCells();
+        moles.forEach(mole => {
+          mole.cellData.moleState.disable();
+        });
+
+        if (gameMoleLevel.round > 0) {
+          if (gameMoleLevel.level < 4) {
             gameMoleLevel.level++;
             gameMoleLevel.round = 0;
           }
@@ -134,8 +139,13 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
       });
 
       gridState.on("GAMEOVER", function() {
+        let moles = vm.gameGrid.getListOfCells();
+        moles.forEach(mole => {
+          mole.cellData.moleState.disable();
+        });
+
         this.imageData.setTint(0xff0000);
-        gameMoleLevel =  {
+        gameMoleLevel = {
           level: 0,
           round: 0
         };

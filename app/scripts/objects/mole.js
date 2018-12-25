@@ -69,14 +69,15 @@ export default class Mole extends Phaser.GameObjects.Sprite {
           _onEnter: function() {
             this.emit("WAITINGINPUT");
           },
-          ACTIVATED: "ACTIVATED"
+          ACTIVATED: "ACTIVATED",
+          GAMEOVER_DISABLED: "GAMEOVER_DISABLED"
         },
         ACTIVATED: {
           _onEnter: function() {
             if (!this.targetMole) {
               this.handle("GAMEOVER");
             }
-            this.emit("ACTIVATED"); // The triggered event needs to reduce the 'to hit' mole list
+            this.emit("ACTIVATED"); // The triggered event needs to reduce the "to hit" mole list
           },
           GAMEOVER: "GAMEOVER",
           _onExit: function() {}
@@ -84,12 +85,21 @@ export default class Mole extends Phaser.GameObjects.Sprite {
         GAMEOVER: {
           _onEnter: function() {
             this.emit("GAMEOVER", { status: "GAMEOVER" });
+            this.handle("GAMEOVER_DISABLED");
+          },
+          _onExit: function() {}
+        },
+        GAMEOVER_DISABLED: {
+          _onEnter: function() {
           },
           _onExit: function() {}
         }
       },
       clickMole: function() {
         this.handle("ACTIVATED");
+      },
+      disable: function() {
+        this.handle("GAMEOVER_DISABLED");
       },
       go: function() {
         this.handle("DEACTIVATED");
