@@ -50,11 +50,11 @@ export default class Mole extends Phaser.GameObjects.Sprite {
               this.ActiveCountDown
             );
           },
-          timeout: "WAITINGINPUT"
+          timeout: "WAITINGINPUT",
+          _onExit: function() {}
         },
         DISABLEDINPUT: {
           _onEnter: function() {
-
             this.emit("DISABLEDINPUT");
             this.timer = setTimeout(
               function() {
@@ -73,7 +73,7 @@ export default class Mole extends Phaser.GameObjects.Sprite {
         },
         ACTIVATED: {
           _onEnter: function() {
-            if(!this.targetMole){
+            if (!this.targetMole) {
               this.handle("GAMEOVER");
             }
             this.emit("ACTIVATED"); // The triggered event needs to reduce the 'to hit' mole list
@@ -81,7 +81,7 @@ export default class Mole extends Phaser.GameObjects.Sprite {
           GAMEOVER: "GAMEOVER",
           _onExit: function() {}
         },
-        "GAMEOVER": {
+        GAMEOVER: {
           _onEnter: function() {
             this.emit("GAMEOVER", { status: "GAMEOVER" });
           },
@@ -107,6 +107,10 @@ export default class Mole extends Phaser.GameObjects.Sprite {
     });
 
     moleState.on("WAITINGINPUT", function() {
+      if (scene.timeOutBar) {
+        scene.timeOutBar.timeOutBarState.go(); // This should not be needed because it the fsm in constructed in the ctor. Should move it to the create method.
+      }
+
       this.cellData.setTint(0x5f6d70);
     });
 
@@ -114,11 +118,12 @@ export default class Mole extends Phaser.GameObjects.Sprite {
       this.cellData.setTint();
       this.targetMole = false;
       let moles = scene.gameGrid.getListOfCells();
-      // debugger;
-      var validTargetMoles = _(moles).find(s => s.cellData.moleState.targetMole === true);
-      if(!validTargetMoles){
+      var validTargetMoles = _(moles).find(
+        s => s.cellData.moleState.targetMole === true
+      );
+      if (!validTargetMoles) {
         let gridState = scene.gameGrid.getGridState();
-        gridState.winRound(); 
+        gridState.winRound();
       }
     });
     moleState.on("GAMEOVER", function() {
@@ -156,8 +161,6 @@ export default class Mole extends Phaser.GameObjects.Sprite {
 
     // done initilizing.
     // Start the mole state machine.
-
-    
   }
 
   create() {}
