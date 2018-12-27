@@ -168,9 +168,6 @@ export default class Mole extends Phaser.GameObjects.Sprite {
     this.disableInteractive = function() {
       this.cellData.disableInteractive();
     };
-
-    // done initilizing.
-    // Start the mole state machine.
   }
 
   create() {}

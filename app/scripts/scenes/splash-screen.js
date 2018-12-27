@@ -57,10 +57,7 @@ export default class SplashScreen extends Phaser.Scene {
    *  @protected
    */
   create() {
-    //  We have nothing left to do here. 
-    // 
     this.scene.start('Demo');
-    // this.scene.start('Main');
   }
 
   //  ------------------------------------------------------------------------
