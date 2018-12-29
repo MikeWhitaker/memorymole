@@ -14,9 +14,11 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
    *
    *  @extends Phaser.GameObjects.Sprite
    */
-  constructor(scene) {
+  constructor(scene, winRoundScene) {
     super(scene, 0, 0, "playGrid");
 
+    this.winRoundScene = winRoundScene || "Main"; //Default to the Main scene
+    debugger;
     const x = scene.cameras.main.width / 2;
     const y = scene.cameras.main.height / 2;
 
@@ -98,7 +100,7 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
               );
             },
             timeout: function() {
-              this.scene.start("Main");
+              this.scene.start(this.winRoundScene);
             },
             _onExit: function() {}
           }
@@ -121,8 +123,6 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
 
       gridState.on("WINROUND", function() {
         this.imageData.setTint(0x00ff00);
-        // increment the amount of moles
-        //Handle the level and round
         let moles = vm.gameGrid.getListOfCells();
         moles.forEach(mole => {
           mole.cellData.moleState.disable();
@@ -192,10 +192,9 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
 
       for (let i = 0; i < xSize; i++) {
         // pop a reference to the cell in a list as well for convenience
-        //this.aMole = this.add.existing(new Mole(this));
-        var mole = scene.add.existing(new Mole(scene, i, yCurrentRow));
-        //We will do the randomize assign of the target mole here.
+        //switch this.
 
+        var mole = scene.add.existing(new Mole(scene, i, yCurrentRow));
         gameGrid.push(mole);
       }
       vm.gameGrid.setGridArray(gameGrid);

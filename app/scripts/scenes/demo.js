@@ -35,7 +35,8 @@ export default class Demo extends Phaser.Scene {
     var sceneClickedHandler = function () { // needs to be loaded in first as it is not hoisted.
       delete this.grid;
       delete this.moles;
-      this.scene.start('Main');
+      // this.scene.start('Main'); to help in the creation process of the secondscene
+      this.scene.start('SecondScene');
     };
 
     this.input.on('pointerdown', sceneClickedHandler, this); //Adds the event listener for the on click of the scene.

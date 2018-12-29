@@ -31,10 +31,12 @@ export default class SecondScene extends Phaser.Scene {
       var shuffledArray = _.shuffle(moleArray);
       var targets = _(shuffledArray)
         .take(amountOfTargets)
-        .value(); // This should be getting an variable ammount of moles instead of just two
-      _.each(targets, function(target) {
+        .value();
+      for (let i = 0; i < amountOfTargets; i++){
+        let target = targets[i];
         target.cellData.moleState.targetMole = true;
-      });
+        target.cellData.moleState.targetMoleOrder = i;
+      }
     }
 
     this.grid = this.add.existing(new PlayGrid(this));
