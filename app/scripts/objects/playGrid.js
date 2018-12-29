@@ -6,6 +6,8 @@
 /* global machina*/
 
 import Mole from "./Mole";
+import MoleSecondScene from "./MoleSecondScene";
+
 
 export default class PlayGrid extends Phaser.GameObjects.Sprite {
   /**
@@ -18,7 +20,6 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
     super(scene, 0, 0, "playGrid");
 
     this.winRoundScene = winRoundScene || "Main"; //Default to the Main scene
-    debugger;
     const x = scene.cameras.main.width / 2;
     const y = scene.cameras.main.height / 2;
 
@@ -193,8 +194,16 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
       for (let i = 0; i < xSize; i++) {
         // pop a reference to the cell in a list as well for convenience
         //switch this.
+        let sceneName = scene.constructor.name;
+        switch (sceneName) {
+          case "SecondScene":
+            var mole = scene.add.existing(new MoleSecondScene(scene, i, yCurrentRow));
+            break;
+          default:
+            var mole = scene.add.existing(new Mole(scene, i, yCurrentRow));
+            break;
+        }
 
-        var mole = scene.add.existing(new Mole(scene, i, yCurrentRow));
         gameGrid.push(mole);
       }
       vm.gameGrid.setGridArray(gameGrid);

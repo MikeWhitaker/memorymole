@@ -33,9 +33,9 @@ export default class MoleSecondScene extends Phaser.GameObjects.Sprite {
           _onEnter: function() {
             this.emit("DEACTIVATED");
             if (this.targetMole) {
-              debugger;
               this.timer = setTimeout(
                 function() {
+                  console.log(this.targetMoleOrder);
                   this.handle("ACTIVEPATTERN");
                 }.bind(this),
                 this.delayActiveCountDown * this.targetMoleOrder
@@ -113,7 +113,9 @@ export default class MoleSecondScene extends Phaser.GameObjects.Sprite {
       }
     });
 
-    moleState.on("DEACTIVATED", function() {});
+    moleState.on("DEACTIVATED", function() {
+      this.cellData.setTint(0x5f6d70);
+    });
 
     moleState.on("ACTIVEPATTERN", function() {
       this.cellData.setTint();
@@ -143,6 +145,7 @@ export default class MoleSecondScene extends Phaser.GameObjects.Sprite {
         gridState.winRound();
       }
     });
+
     moleState.on("GAMEOVER", function() {
       let gridState = scene.gameGrid.getGridState();
       gridState.gameOver();
