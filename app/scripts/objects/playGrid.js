@@ -39,7 +39,7 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
         initialize: function() {},
         namespace: "grid-state",
         initialState: "uninitialized",
-        gameOverCountDown: 4000,
+        gameOverCountDown: 10000,
         startNewGameTimer: 3000,
         startNewRoundTimer: 1500,
         states: {

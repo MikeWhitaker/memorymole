@@ -22,6 +22,7 @@ export default class MoleSecondScene extends Phaser.GameObjects.Sprite {
       initialState: "uninitialized",
       ActiveCountDown: 1500,
       delayActiveCountDown: 500,
+      initialActiveDelay: 500,
       states: {
         uninitialized: {
           "*": function() {
@@ -35,10 +36,10 @@ export default class MoleSecondScene extends Phaser.GameObjects.Sprite {
             if (this.targetMole) {
               this.timer = setTimeout(
                 function() {
-                  console.log(this.targetMoleOrder);
                   this.handle("ACTIVEPATTERN");
                 }.bind(this),
-                this.delayActiveCountDown * this.targetMoleOrder
+                this.delayActiveCountDown * this.targetMoleOrder +
+                  this.initialActiveDelay
               );
             } else {
               this.transition("DISABLEDINPUT");
@@ -97,8 +98,7 @@ export default class MoleSecondScene extends Phaser.GameObjects.Sprite {
           _onExit: function() {}
         },
         GAMEOVER_DISABLED: {
-          _onEnter: function() {
-          },
+          _onEnter: function() {},
           _onExit: function() {}
         }
       },
@@ -134,13 +134,24 @@ export default class MoleSecondScene extends Phaser.GameObjects.Sprite {
     });
 
     moleState.on("ACTIVATED", function() {
+      //this is where the win condition is determined.
       this.cellData.setTint();
-      this.targetMole = false;
-      let moles = scene.gameGrid.getListOfCells();
-      var validTargetMoles = _(moles).find(
-        s => s.cellData.moleState.targetMole === true
-      );
-      if (!validTargetMoles) {
+      //get the first mole for the exposed target mole list
+      let firstMoleInTargetMoleList = _(scene.targetMoles).first(); // what happens if the array of targetMoles is empty? It should not occur.
+      let firstMoleTargetMoleOrder = firstMoleInTargetMoleList.cellData.moleState.targetMoleOrder;
+      let clickedMoleTargetOrder = this.cellData.moleState.targetMoleOrder;
+      if (firstMoleTargetMoleOrder !== clickedMoleTargetOrder) {
+        let gridState = scene.gameGrid.getGridState();
+        gridState.gameOver();
+        return;
+      }
+
+      // we have pass the if statement so the mole that was clicked must be the first in the list
+      //pop the targetMole out of the targetMoles array
+      scene.targetMoles.shift();
+      scene.timeOutBar.timeOutBarState.reset();
+      // go to win round when the array is empty
+      if (scene.targetMoles.length === 0) {
         let gridState = scene.gameGrid.getGridState();
         gridState.winRound();
       }

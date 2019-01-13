@@ -29,14 +29,15 @@ export default class SecondScene extends Phaser.Scene {
     function setTargetMoles(moleArray, amountOfTargets) {
       //shuffle the array
       var shuffledArray = _.shuffle(moleArray);
-      var targets = _(shuffledArray)
+      var targetMoles = _(shuffledArray)
         .take(amountOfTargets)
         .value();
       for (let i = 0; i < amountOfTargets; i++){
-        let target = targets[i];
+        let target = targetMoles[i];
         target.cellData.moleState.targetMole = true;
         target.cellData.moleState.targetMoleOrder = i;
       }
+      return targetMoles;
     }
 
     this.grid = this.add.existing(new PlayGrid(this));
@@ -51,8 +52,9 @@ export default class SecondScene extends Phaser.Scene {
     //set percent bar 
     this.timeOutBar = this.add.existing(new TimeOutBar(this, 0, 895));
 
-    setTargetMoles(this.moles, this.amountOfTargets);
-    //_(this.moles).each(s => s.cellData.moleState.go());
+    let targetMolesByRef = setTargetMoles(this.moles, this.amountOfTargets);
+    this.targetMoles = targetMolesByRef.slice(); // creates a new array by value as opposed to by reference.
+
     _(this.moles).each(s => s.cellData.moleState.go());
 
   }
