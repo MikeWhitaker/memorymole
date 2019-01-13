@@ -12,13 +12,13 @@ export default class TimeOutBar extends Phaser.GameObjects.Sprite {
   constructor(scene, x, y) {
     super(scene, 0, 0, "timeOutBar");
 
+    var self = this;
     this.setPosition(x, y);
     this.setOrigin(0, 0);
     this.width = 600;
     this.maxTimeInMilliSec = 2000;
     this.onePercentOfMaxTime = this.maxTimeInMilliSec / 100; // as the current implementation of the timer does not support a variable time.
     this.maxTimeInMilliSec / 100;
-    var self = this;
 
     this.timeOutBarState = new machina.Fsm({
       initialize: function() {},
@@ -38,7 +38,18 @@ export default class TimeOutBar extends Phaser.GameObjects.Sprite {
         },
         RUNNING: {
           _onEnter: function() {},
+          GAMEOVER: "GAMEOVER",
           RESET: "RESET",
+          _onExit: function() {
+            this.timer = null;
+          }
+        },
+        GAMEOVER: {
+          _onEnter: function() {
+            let gridState = scene.gameGrid.getGridState();
+            gridState.gameOver();
+          },
+
           _onExit: function() {}
         },
         RESET: {
@@ -55,27 +66,30 @@ export default class TimeOutBar extends Phaser.GameObjects.Sprite {
       },
       reset: function() {
         this.handle("RESET");
+      },
+      gameOver: function() {
+        this.handle("GAMEOVER");
       }
     });
-    
+
     this.timeOutBarState.setInitialTimeProperties = function() {
       self.maxTimeInMilliSec = 2500;
-      
       self.initialTime = self.currentTime || 0;
-      
     };
   }
 
   update(t) {
     //set percent bar
     self.currentTime = t;
-    if (this.timeOutBarState.state === "RUNNING") {
-      this.initialTime = this.initialTime || t;
-      let elapsedTime = t - this.initialTime; // time since first run
-      let percentElapsed = elapsedTime / this.onePercentOfMaxTime;
-      let percentRemaining = 100 - percentElapsed;
-      let fractureRemaining = percentRemaining / 100;
-      this.displayWidth = this.width * fractureRemaining;
-    }
+
+    if (this.timeOutBarState.state !== "RUNNING") return;
+
+    this.initialTime = this.initialTime || t;
+    let elapsedTime = t - this.initialTime; // time since first run
+    let percentElapsed = elapsedTime / this.onePercentOfMaxTime;
+    let percentRemaining = 100 - percentElapsed;
+    let fractureRemaining = percentRemaining / 100;
+    this.displayWidth = this.width * fractureRemaining;
+    if (this.displayWidth < 1) this.timeOutBarState.gameOver();
   }
 }

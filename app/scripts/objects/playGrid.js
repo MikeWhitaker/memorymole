@@ -27,7 +27,7 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
     this.setOrigin(0.5);
     this.grid = {};
 
-    var vm = this;
+    var self = this;
 
     var Grid = function(xSize, ySize) {
       //initialize the grid.
@@ -124,7 +124,7 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
 
       gridState.on("WINROUND", function() {
         this.imageData.setTint(0x00ff00);
-        let moles = vm.gameGrid.getListOfCells();
+        let moles = self.gameGrid.getListOfCells();
         moles.forEach(mole => {
           mole.cellData.moleState.disable();
         });
@@ -140,7 +140,7 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
       });
 
       gridState.on("GAMEOVER", function() {
-        let moles = vm.gameGrid.getListOfCells();
+        let moles = self.gameGrid.getListOfCells();
         moles.forEach(mole => {
           mole.cellData.moleState.disable();
         });
@@ -189,7 +189,7 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
 
     var Row = function(xSize, yCurrentRow) {
       var row = [];
-      var gameGrid = vm.gameGrid.getListOfCells();
+      var gameGrid = self.gameGrid.getListOfCells();
 
       for (let i = 0; i < xSize; i++) {
         // pop a reference to the cell in a list as well for convenience
@@ -206,7 +206,7 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
 
         gameGrid.push(mole);
       }
-      vm.gameGrid.setGridArray(gameGrid);
+      self.gameGrid.setGridArray(gameGrid);
 
       var getRow = function() {
         return row;
@@ -221,9 +221,9 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
       var columnAmount = 3;
       var rowAmount = 4; // total of 12 cells, its ok te define here as the size of the grid wont change.
 
-      vm.gameGrid = new Grid(columnAmount, rowAmount);
-      scene.gameGrid = vm.gameGrid;
-      var gridArray = vm.gameGrid.getGridArray();
+      self.gameGrid = new Grid(columnAmount, rowAmount);
+      scene.gameGrid = self.gameGrid;
+      var gridArray = self.gameGrid.getGridArray();
       for (let i = 0; i < rowAmount; i++) {
         var row = new Row(columnAmount, i);
       }

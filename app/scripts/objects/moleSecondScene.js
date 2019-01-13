@@ -58,7 +58,7 @@ export default class MoleSecondScene extends Phaser.GameObjects.Sprite {
               this.ActiveCountDown
             );
           },
-          timeout: "WAITINGINPUT",
+          goWaitingInput: "WAITINGINPUT",
           _onExit: function() {}
         },
         DISABLEDINPUT: {
@@ -83,7 +83,7 @@ export default class MoleSecondScene extends Phaser.GameObjects.Sprite {
         ACTIVATED: {
           _onEnter: function() {
             if (!this.targetMole) {
-              this.handle("GAMEOVER"); // this also needs to be altered to get the correct mole
+              this.handle("GAMEOVER");
             }
             this.emit("ACTIVATED"); // The triggered event needs to reduce the "to hit" mole list
           },
@@ -146,7 +146,7 @@ export default class MoleSecondScene extends Phaser.GameObjects.Sprite {
         return;
       }
 
-      // we have pass the if statement so the mole that was clicked must be the first in the list
+      // we have passed the if statement so the mole that was clicked must be the first in the list
       //pop the targetMole out of the targetMoles array
       scene.targetMoles.shift();
       scene.timeOutBar.timeOutBarState.reset();
