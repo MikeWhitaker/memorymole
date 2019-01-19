@@ -143,7 +143,9 @@ export default class PlayGrid extends Phaser.GameObjects.Sprite {
         let moles = self.gameGrid.getListOfCells();
         moles.forEach(mole => {
           mole.cellData.moleState.disable();
+          //should call scene.timeOutBar.disable()
         });
+        scene.timeOutBar.timeOutBarState.gameOver();
 
         this.imageData.setTint(0xff0000);
         gameMoleLevel = {

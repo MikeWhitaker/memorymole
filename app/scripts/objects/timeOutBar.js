@@ -40,16 +40,12 @@ export default class TimeOutBar extends Phaser.GameObjects.Sprite {
           _onEnter: function() {},
           GAMEOVER: "GAMEOVER",
           RESET: "RESET",
-          _onExit: function() {
-            this.timer = null;
-          }
+          _onExit: function() {}
         },
         GAMEOVER: {
           _onEnter: function() {
-            let gridState = scene.gameGrid.getGridState();
-            gridState.gameOver();
+            this.emit("GAMEOVER");
           },
-
           _onExit: function() {}
         },
         RESET: {
@@ -71,6 +67,14 @@ export default class TimeOutBar extends Phaser.GameObjects.Sprite {
         this.handle("GAMEOVER");
       }
     });
+
+    this.timeOutBarState.on("GAMEOVER", function() {
+      let gridState = scene.gameGrid.getGridState();
+      gridState.gameOver();
+      self.destroy();
+    });
+
+    // The timeoutbar should be invisble when the state is game oven
 
     this.timeOutBarState.setInitialTimeProperties = function() {
       self.maxTimeInMilliSec = 2500;
